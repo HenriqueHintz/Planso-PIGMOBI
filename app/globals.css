@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-green: #16A34A;
+  --color-brand-light: #F8F9F7;
+  --font-sans: var(--font-sans), sans-serif;
+}
+
+:root {
+  --accent: #16A34A;
+  --primary: #16A34A;
+  --background: #F8F9F7;
+  --surface: #FFFFFF;
+  --success: #16A34A;
+}
+
+/* GLOBAL NOISE OVERLAY — subtle tactile quality */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.015;
+  mix-blend-mode: overlay;
+}
+
+::selection {
+  background-color: rgba(37, 99, 235, 0.15);
+  color: #1e3a8a;
+}
+
+/* Focus visible matching accent */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Responsive custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Print Specific Utility Rules */
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm 15mm 20mm 15mm;
+  }
+  
+  body {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Avoid splitting critical sections between pages */
+  .print-avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Force page break when requested */
+  .print-force-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Custom styling resets for print */
+  .print-text-dark {
+    color: #000000 !important;
+  }
+}
+
