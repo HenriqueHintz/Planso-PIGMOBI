@@ -29,6 +29,7 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
+  Printer,
   Share2
 } from 'lucide-react';
 import Link from 'next/link';
@@ -1114,10 +1115,19 @@ export default function Page() {
                     <button
                       type="button"
                       onClick={copyToClipboard}
-                      className="col-span-2 w-full py-3.5 px-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg font-sans cursor-pointer"
+                      className="w-full py-3.5 px-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg font-sans cursor-pointer"
                     >
                       <Copy className="w-4 h-4 text-emerald-400 stroke-[2.5]" />
                       <span>Copiar Proposta</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => window.print()}
+                      className="w-full py-3.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 border border-slate-200 font-sans cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4 text-slate-500 stroke-[2.5]" />
+                      <span>Gerar PDF / Impressão</span>
                     </button>
 
                     <button
@@ -1359,175 +1369,99 @@ export default function Page() {
       </AnimatePresence>
 
       {/* PIXEL-PERFECT A4 PRINTABLE PROPOSAL SECTION (EXCLUSIVE TO PRINTING) */}
-      <div className="hidden print:block text-slate-950 bg-white p-2 w-full text-left font-sans" id="printable-proposta">
+      <div className="hidden print:block text-slate-950 bg-white p-8 w-full text-left font-sans max-w-3xl mx-auto" id="printable-proposta">
         
         {/* Document Header */}
-        <div className="border-b-4 border-slate-900 pb-5 mb-6 flex justify-between items-start">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <Image src="/logo-pigmobi.webp" alt="PIGMOBI" width={160} height={48} className="h-10 w-auto object-contain" />
-              <span className="font-mono font-black text-xs uppercase tracking-widest bg-emerald-50 px-2 py-1 rounded text-emerald-800 border border-emerald-100">SIMULADOR DE INVESTIMENTO</span>
-            </div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">PROPOSTA COMERCIAL</h1>
-            <p className="text-xs text-slate-500 font-medium">Sistema de Gestão Comercial e Operação para Chopp & Autoatendimento</p>
-          </div>
-          <div className="text-right text-xs space-y-1 font-mono text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
-            <div><strong className="text-slate-900">Emissão:</strong> {todayStr}</div>
-            <div><strong className="text-slate-900">Ref:</strong> PROP-{yearStr}-CHOPP</div>
-            <div><strong className="text-slate-900">Validade:</strong> {expirationDate} (10 dias)</div>
+        <div className="border-b-2 border-slate-200 pb-6 mb-8 flex justify-between items-center">
+          <Image src="/logo-pigmobi.webp" alt="PIGMOBI" width={160} height={48} className="h-12 w-auto object-contain" />
+          <div className="text-right text-xs space-y-1 font-mono text-slate-500">
+            <div><strong>Emissão:</strong> {todayStr}</div>
+            <div><strong>Validade:</strong> {expirationDate} (10 dias)</div>
           </div>
         </div>
 
-        {/* Client Metadata Info Grid */}
-        <div className="grid grid-cols-2 gap-6 bg-slate-50 p-4 border border-slate-200 rounded-3xl mb-6 text-xs">
-          <div>
-            <span className="text-[9px] font-bold text-slate-400 font-mono block uppercase">PREPARADO PARA:</span>
-            <strong className="text-sm font-bold text-slate-900">Cliente Especial / Estabelecimento Comercial</strong>
-            <p className="text-slate-500 mt-1">Estimativa de custos customizada criada pelo formulário interativo de simulação de plano.</p>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">PROPOSTA COMERCIAL</h1>
+          <p className="text-xs text-slate-500 font-medium">Orçamento detalhado para ativação do sistema</p>
+        </div>
+
+        <div className="border border-slate-200 rounded-3xl p-6 mb-8 space-y-4">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <span className="text-sm font-bold text-slate-500">Plano Selecionado</span>
+            <span className="text-sm font-black text-slate-900">{selectedPlan.name}</span>
           </div>
-          <div>
-            <span className="text-[9px] font-bold text-slate-400 font-mono block uppercase">CONTATO E SUPORTE:</span>
-            <strong className="text-sm font-bold text-emerald-805">Suporte Comercial por Rico Pompeo</strong>
-            <p className="text-slate-500 mt-1">Canal de Whatsapp: (81) 9.9404-5175 | Recife - Pernambuco</p>
+
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <span className="text-sm font-bold text-slate-500">Acessos no Sistema</span>
+            <span className="text-sm font-black text-slate-900">
+              {selectedPlan.accessControl.included + additionalAcessos} acesso(s)
+              {additionalAcessos > 0 ? ` (${selectedPlan.accessControl.included} inclusos + ${additionalAcessos} adicionais)` : ' (Inclusos)'}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <span className="text-sm font-bold text-slate-500">Mensalidade Base</span>
+            <span className="text-sm font-black text-slate-900">{formatCurrency(selectedPlan.monthlyPrice)}/mês</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-bold text-slate-500">Taxa de Implantação</span>
+            <span className="text-sm font-black text-slate-900">{formatCurrency(selectedPlan.setupPrice)} (Taxa Única)</span>
           </div>
         </div>
 
-        {/* Plan Section Area */}
-        <div className="space-y-3 mb-6 print-avoid-break">
-          <div className="bg-slate-900 text-white p-3.5 rounded-xl flex justify-between items-center">
-            <h2 className="font-black text-sm uppercase tracking-wider">1. Plano Principal Selecionado: {selectedPlan.name.toUpperCase()}</h2>
-            <span className="text-xs text-emerald-400 font-mono font-bold">Base Contratual Inclusa</span>
-          </div>
-
-          <div className="border border-slate-200 rounded-2xl overflow-hidden">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                  <th className="p-3 text-left">Especificação do Plano Base</th>
-                  <th className="p-3 text-center w-[160px]">Taxa Setup (Única)</th>
-                  <th className="p-3 text-right w-[160px]">Mensalidade Base</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-800">
-                <tr>
-                  <td className="p-3">
-                    <strong className="font-bold text-slate-900">{selectedPlan.name} Tier</strong>
-                    <p className="text-[10px] text-slate-500 mt-0.5">{selectedPlan.description}</p>
-                  </td>
-                  <td className="p-3 text-center font-mono font-bold">{formatCurrency(selectedPlan.setupPrice)}</td>
-                  <td className="p-3 text-right font-mono font-bold text-emerald-800">{formatCurrency(selectedPlan.monthlyPrice)}/mês</td>
-                </tr>
-                <tr className="bg-slate-50/50">
-                  <td className="p-3 text-xs text-slate-700" colSpan={3}>
-                    <div className="flex justify-between items-center">
-                      <span><strong>Acessos Liberados no Sistema:</strong> {selectedPlan.accessControl.included} incluso(s) {additionalAcessos > 0 ? `com mais ${additionalAcessos} adicional(is)` : ''}</span>
-                      <strong className="font-mono text-slate-900">Total: {selectedPlan.accessControl.included + additionalAcessos} acesso(s)</strong>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Resources checklist in print document */}
-          <div className="bg-slate-50/50 p-4 border border-slate-100 rounded-2xl">
-            <span className="text-[9px] font-black text-slate-400 font-mono block mb-2 uppercase">RECURSOS E DIRETRIZES DESTAQUE DO PLANO BASE:</span>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[11px] text-slate-700">
-              {selectedPlan.recursosInclusos.map((rec, i) => (
-                <div key={i} className="flex gap-1.5 items-start">
-                  <span className="text-emerald-600 font-bold shrink-0 mt-0.5">✔</span>
-                  <span>{rec}</span>
+        {calculatedValues.selectedList.length > 0 && (
+          <div className="mb-8 print-avoid-break">
+            <h3 className="text-xs font-black tracking-wider uppercase text-slate-400 mb-3">Adicionais e Acessos Integrados</h3>
+            <div className="border border-slate-200 rounded-3xl p-6 divide-y divide-slate-100">
+              {calculatedValues.selectedList.map(({ item, qty, unitPrice, subtotal }) => (
+                <div key={item.id} className="flex justify-between items-center py-3 first:pt-0 last:pb-0">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-slate-900">{item.name}</span>
+                    {item.hasQuantity ? (
+                      <span className="text-[10px] text-slate-500">{qty}x — {formatCurrency(unitPrice)}/un</span>
+                    ) : (
+                      <span className="text-[10px] text-slate-500">{formatCurrency(unitPrice)}/mês</span>
+                    )}
+                  </div>
+                  <span className="text-sm font-black text-slate-900">+{formatCurrency(subtotal)}/mês</span>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Additionals Section Area */}
-        <div className="space-y-3 mb-6 print-avoid-break">
-          <div className="bg-slate-900 text-white p-3.5 rounded-xl flex justify-between items-center">
-            <h2 className="font-black text-sm uppercase tracking-wider">2. Serviços Extra e Opcionais Adicionados</h2>
-            <span className="text-xs text-emerald-400 font-mono font-bold">Subtotais Recorrentes</span>
-          </div>
-
-          <div className="border border-slate-200 rounded-2xl overflow-hidden">
-            {calculatedValues.selectedList.length > 0 ? (
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                    <th className="p-3 text-left">Descrição do Item Opcional</th>
-                    <th className="p-3 text-center w-[120px]">Quantidade</th>
-                    <th className="p-3 text-center w-[140px]">Valor Unitário</th>
-                    <th className="p-3 text-right w-[140px]">Subtotal Mensal</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-800">
-                  {calculatedValues.selectedList.map(({ item, qty, unitPrice, subtotal }) => (
-                    <tr key={item.id} className="hover:bg-slate-50">
-                      <td className="p-3">
-                        <strong className="font-bold text-slate-950">{item.name}</strong>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{item.description}</p>
-                      </td>
-                      <td className="p-3 text-center font-mono font-bold text-slate-900">{qty}x</td>
-                      <td className="p-3 text-center font-mono">{formatCurrency(unitPrice)}</td>
-                      <td className="p-3 text-right font-mono font-bold text-slate-900">+{formatCurrency(subtotal)}/mês</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="p-6 text-center text-xs text-slate-400 italic">
-                Nenhum adicional extra ou opcional selecionado nesta proposta.
+              <div className="flex justify-between items-center pt-3 font-bold text-slate-900">
+                <span className="text-sm font-bold text-slate-900">Total Adicionais</span>
+                <span className="text-sm font-black text-slate-900">+{formatCurrency(calculatedValues.additionalsTotal)}/mês</span>
               </div>
-            )}
-          </div>
-        </div>
-
-        {/* Observations Section Area with avoid-page-break */}
-        <div className="space-y-3 mb-6 print-avoid-break">
-          <div className="bg-slate-900 text-white p-3.5 rounded-xl">
-            <h2 className="font-black text-sm uppercase tracking-wider">3. Observações Especiais e Termos Financeiros</h2>
-          </div>
-          <div className="border border-slate-200 bg-slate-50/20 p-5 rounded-2xl text-[11px] leading-relaxed text-slate-800">
-            <MarkdownRender content={observations} />
-          </div>
-        </div>
-
-        {/* Final Financial Breakdown Summary Box */}
-        <div className="border-2 border-slate-950 rounded-3xl p-5 mb-8 print-avoid-break grid grid-cols-2 gap-4 text-left">
-          <div className="border-r border-slate-200 pr-4 flex flex-col justify-between">
-            <div>
-              <span className="text-[9px] font-black font-mono text-slate-400 block uppercase tracking-wider">TAXA IMPLANTAÇÃO ÚNICA (SETUP)</span>
-              <p className="text-[10px] text-slate-500 italic mt-0.5 leading-tight">Valor a ser pago no onboarding/assinatura e cobrado apenas uma única vez na instalação inicial.</p>
             </div>
-            <strong className="text-2xl font-black font-mono text-slate-900 mt-3 block">
-              {formatCurrency(calculatedValues.setupTotal)}
-            </strong>
           </div>
-          <div className="pl-4 flex flex-col justify-between">
-            <div>
-              <span className="text-[9px] font-black font-mono text-emerald-700 block uppercase tracking-wider">MENSALIDADE RECORRENTE TOTAL</span>
-              <p className="text-[10px] text-slate-500 italic mt-0.5 leading-tight">Inclui licenciamento de uso do Plano {selectedPlan.name} base, acessos configurados e todos os opcionais ativos.</p>
+        )}
+
+        <div className="mb-8 print-avoid-break">
+          <h3 className="text-xs font-black tracking-wider uppercase text-slate-400 mb-3">Consolidado Financeiro</h3>
+          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 grid grid-cols-2 gap-6 divide-x divide-slate-200">
+            <div className="flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Mensalidade Total</span>
+              <span className="text-xl font-black text-emerald-800 mt-2 block">{formatCurrency(calculatedValues.totalMonthly)}/mês</span>
             </div>
-            <strong className="text-2xl font-black font-mono text-emerald-800 mt-3 block">
-              {formatCurrency(calculatedValues.totalMonthly)}<span className="text-xs font-normal text-slate-400">/mês</span>
-            </strong>
+            <div className="pl-6 flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Implantação (Setup)</span>
+              <span className="text-xl font-black text-slate-900 mt-2 block">{formatCurrency(calculatedValues.setupTotal)}</span>
+            </div>
           </div>
         </div>
 
-        {/* Printable Footer / Terms disclaimers */}
-        <div className="border-t border-slate-200 pt-5 text-center text-[10px] text-slate-400 space-y-1.5 font-sans">
-          <p className="font-medium text-slate-500">
-            * Cotação gerada de forma automatizada pelo simulador interativo de contratação na data informada.
-          </p>
-          <p>
-            Esta proposta não cria um vínculo contratual definitivo e está sujeita a reavaliação cadastral técnica.
-          </p>
-          <p className="font-mono font-bold uppercase text-[9px] tracking-wider text-slate-500">
-            Empresa Licenciadora S.A. | Todos os Direitos Reservados — Suporte Técnico pelo WhatsApp Comercial
-          </p>
-        </div>
+        {observations && (
+          <div className="mb-8 print-avoid-break">
+            <h3 className="text-xs font-black tracking-wider uppercase text-slate-400 mb-3">Observações Adicionais</h3>
+            <div className="border border-slate-200 bg-slate-50/20 p-5 rounded-3xl text-xs leading-relaxed text-slate-700">
+              <MarkdownRender content={observations} />
+            </div>
+          </div>
+        )}
 
+        <div className="border-t border-slate-200 pt-6 text-center text-[10px] text-slate-400 space-y-2">
+          <p className="font-bold text-slate-500">Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!</p>
+          <p>Esta proposta não cria um vínculo contratual definitivo e está sujeita a reavaliação cadastral técnica.</p>
+        </div>
       </div>
 
       {/* ===== MOBILE STICKY BOTTOM BAR (hidden on lg+, always visible on mobile) ===== */}
@@ -1549,10 +1483,18 @@ export default function Page() {
               <button
                 type="button"
                 onClick={copyToClipboard}
-                className="py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md"
+                className="py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md cursor-pointer"
               >
                 <Copy className="w-3 h-3 text-emerald-400" />
                 <span>Copiar</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 border border-slate-200 cursor-pointer"
+              >
+                <Printer className="w-3 h-3 text-slate-500" />
+                <span>PDF</span>
               </button>
               <button
                 type="button"
