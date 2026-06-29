@@ -634,39 +634,39 @@ export default function Page() {
 
     const totalAcessos = selectedPlan.accessControl.included + additionalAcessos;
     const acessosTexto = additionalAcessos > 0
-      ? `${selectedPlan.accessControl.included} incluso(s) com mais ${additionalAcessos} adicional(is) (Total de ${totalAcessos} acessos)`
-      : `${selectedPlan.accessControl.included} incluso(s) (Total de ${totalAcessos} acesso${totalAcessos > 1 ? 's' : ''})`;
+      ? `${selectedPlan.accessControl.included} incluso(s) com mais ${additionalAcessos} adicional(is) (Total: ${totalAcessos} acessos)`
+      : `${selectedPlan.accessControl.included} incluso(s) (Total: ${totalAcessos} acesso${totalAcessos > 1 ? 's' : ''})`;
 
     let text = `=====================================\n`;
-    text += `📋 ORÇAMENTO SISTEMA RESTAURANTE 🍔🥑\n`;
+    text += `ORÇAMENTO SISTEMA RESTAURANTE\n`;
     text += `=====================================\n\n`;
-    text += `⭐ Plano Selecionado: ${selectedPlan.name}\n`;
-    text += `🔑 Acessos no Sistema: ${acessosTexto}\n`;
-    text += `💵 Mensalidade Base: ${formatCurrency(selectedPlan.monthlyPrice)}/mês\n`;
-    text += `⚙️ Taxa de Implantação: ${formatCurrency(selectedPlan.setupPrice)} (Taxa Única)\n\n`;
+    text += `Plano Selecionado: ${selectedPlan.name}\n`;
+    text += `Acessos no Sistema: ${acessosTexto}\n`;
+    text += `Mensalidade Base: ${formatCurrency(selectedPlan.monthlyPrice)}/mês\n`;
+    text += `Taxa de Implantação: ${formatCurrency(selectedPlan.setupPrice)} (Taxa Única)\n\n`;
 
     if (calculatedValues.selectedList.length > 0) {
-      text += `➕ Adicionais e Acessos Integrados:\n`;
+      text += `Adicionais e Acessos Integrados:\n`;
       calculatedValues.selectedList.forEach(({ item, qty, unitPrice, subtotal }) => {
         if (item.hasQuantity) {
-          text += `  • ${item.name} (${qty}x) — ${formatCurrency(unitPrice)}/un [Subtotal: ${formatCurrency(subtotal)}/mês]\n`;
+          text += `  - ${item.name} (${qty}x) — ${formatCurrency(unitPrice)}/un [Subtotal: ${formatCurrency(subtotal)}/mês]\n`;
         } else {
-          text += `  • ${item.name} — ${formatCurrency(unitPrice)}/mês \n`;
+          text += `  - ${item.name} — ${formatCurrency(unitPrice)}/mês \n`;
         }
       });
-      text += `\n  ➔ Total Adicionais: ${formatCurrency(calculatedValues.additionalsTotal)}/mês\n`;
+      text += `\n  Total Adicionais: ${formatCurrency(calculatedValues.additionalsTotal)}/mês\n`;
     } else {
-      text += `➕ Adicionais: Nenhum selecionado.\n`;
+      text += `Adicionais: Nenhum selecionado.\n`;
     }
 
     text += `\n=====================================\n`;
-    text += `📊 CONSOLIDADO FINANCEIRO\n`;
+    text += `CONSOLIDADO FINANCEIRO\n`;
     text += `=====================================\n`;
-    text += `🟢 MENSALIDADE TOTAL: ${formatCurrency(calculatedValues.totalMonthly)}/mês\n`;
-    text += `🛠️ IMPLANTAÇÃO: ${formatCurrency(calculatedValues.setupTotal)} (Pago uma única vez no onboarding)\n`;
+    text += `MENSALIDADE TOTAL: ${formatCurrency(calculatedValues.totalMonthly)}/mês\n`;
+    text += `IMPLANTAÇÃO: ${formatCurrency(calculatedValues.setupTotal)} (Pago uma única vez no onboarding)\n`;
     text += `=====================================\n\n`;
-    text += `📅 Gerado em: ${dateFormatted}\n`;
-    text += `💬 Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!\n`;
+    text += `Gerado em: ${dateFormatted}\n`;
+    text += `Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!\n`;
 
     return text;
   };
