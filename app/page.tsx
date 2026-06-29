@@ -30,8 +30,10 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
-  Printer
+  Printer,
+  Share2
 } from 'lucide-react';
+import Link from 'next/link';
 import { PLANOS_JSON, PLANS, ALL_ADDITIONAL_ITEMS, formatCurrency, PlanDefinition, AdditionalItemDefinition } from '../lib/data';
 
 // Component to dynamically render Lucide Icons by name
@@ -692,6 +694,13 @@ export default function Page() {
     window.open(whatsappUrl, '_blank');
   };
 
+  // Redirect to Semi-Automated WhatsApp Dispatcher with prefilled quote
+  const handleRedirectToDispatcher = () => {
+    const textMessage = generateQuoteText();
+    sessionStorage.setItem('pigmobi_quote_text', textMessage);
+    window.location.href = '/whatsapp';
+  };
+
   // Dynamic background colors according to the selected plan
   const bgClassAndTone = useMemo(() => {
     switch (selectedPlanId) {
@@ -723,30 +732,41 @@ export default function Page() {
           <span className="text-sm font-black text-slate-900 tracking-tight hidden sm:block">PIGMOBI</span>
         </motion.div>
 
-        {/* Nav Tabs inline */}
-        <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-0.5 border border-slate-200">
-          <button
-            onClick={() => setActiveTab('simulador')}
-            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
-              activeTab === 'simulador'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-600 hover:text-slate-950'
-            }`}
+        <div className="flex items-center gap-2">
+          {/* Nav Tabs inline */}
+          <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-0.5 border border-slate-200">
+            <button
+              onClick={() => setActiveTab('simulador')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
+                activeTab === 'simulador'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-950'
+              }`}
+            >
+              <PiggyBank className="w-3 h-3" />
+              <span>Simulador</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('comparativo')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
+                activeTab === 'comparativo'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-950'
+              }`}
+            >
+              <TrendingUp className="w-3 h-3" />
+              <span>Comparativo</span>
+            </button>
+          </div>
+
+          <Link
+            href="/whatsapp"
+            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 shadow-sm shrink-0 cursor-pointer text-center"
           >
-            <PiggyBank className="w-3 h-3" />
-            <span>Simulador</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('comparativo')}
-            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${
-              activeTab === 'comparativo'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-600 hover:text-slate-950'
-            }`}
-          >
-            <TrendingUp className="w-3 h-3" />
-            <span>Comparativo</span>
-          </button>
+            <Share2 className="w-3 h-3 text-white" />
+            <span className="hidden sm:inline">Disparador WhatsApp</span>
+            <span className="sm:hidden">Disparador</span>
+          </Link>
         </div>
       </header>
 
@@ -1105,12 +1125,21 @@ export default function Page() {
                     <button
                       type="button"
                       onClick={sendToWhatsApp}
-                      className="w-full py-3.5 px-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 shadow-md shadow-emerald-600/10 font-sans"
+                      className="w-full py-3.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 border border-slate-200 font-sans"
                     >
-                      <svg className="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 fill-current text-slate-500 shrink-0" viewBox="0 0 24 24">
                         <path d="M12.011 20c-3.123 0-5.877-1.464-7.669-3.754l-.454-.576-2.505.654.67-2.454-.424-.555C1.199 12.695.836 11.233.836 9.75c0-4.839 3.931-8.771 8.771-8.771 4.84 0 8.773 3.932 8.773 8.771 0 4.839-3.933 8.771-8.772 8.771zM19.61 9.75c0-5.938-4.821-10.75-10.75-10.75C2.923-1 1.9 4.812 1.9 10.75c0 1.83.47 3.55 1.3 5.06l-.92 3.39 3.49-.91c1.44.8 3.08 1.21 4.79 1.21 5.92-.01 10.75-4.81 10.75-10.75z" />
                       </svg>
-                      <span>Abertura Wa</span>
+                      <span>Link Rápido WA</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleRedirectToDispatcher}
+                      className="col-span-2 w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/10 font-sans cursor-pointer"
+                    >
+                      <Share2 className="w-4 h-4 stroke-[2.5]" />
+                      <span>Enviar no WhatsApp (Disparador)</span>
                     </button>
 
                     <button
@@ -1549,10 +1578,10 @@ export default function Page() {
               </button>
               <button
                 type="button"
-                onClick={sendToWhatsApp}
-                className="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md"
+                onClick={handleRedirectToDispatcher}
+                className="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md cursor-pointer"
               >
-                <svg className="w-3 h-3 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12.011 20c-3.123 0-5.877-1.464-7.669-3.754l-.454-.576-2.505.654.67-2.454-.424-.555C1.199 12.695.836 11.233.836 9.75c0-4.839 3.931-8.771 8.771-8.771 4.84 0 8.773 3.932 8.773 8.771 0 4.839-3.933 8.771-8.772 8.771zM19.61 9.75c0-5.938-4.821-10.75-10.75-10.75C2.923-1 1.9 4.812 1.9 10.75c0 1.83.47 3.55 1.3 5.06l-.92 3.39 3.49-.91c1.44.8 3.08 1.21 4.79 1.21 5.92-.01 10.75-4.81 10.75-10.75z" /></svg>
+                <Share2 className="w-3 h-3 text-white" />
                 <span>WhatsApp</span>
               </button>
               <button
