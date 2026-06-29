@@ -642,7 +642,10 @@ export default function Page() {
     let text = `=====================================\n`;
     text += `ORÇAMENTO DO SISTEMA\n`;
     text += `=====================================\n\n`;
-    text += `  Plano Selecionado: ${selectedPlan.name}\n\n`;
+    text += `  Plano Selecionado: ${selectedPlan.name}\n`;
+    text += `  Acessos no Sistema: ${acessosTexto}\n`;
+    text += `  Mensalidade Base: ${formatCurrency(selectedPlan.monthlyPrice)}/mês\n`;
+    text += `  Taxa de Implantação: ${formatCurrency(selectedPlan.setupPrice)} (Taxa Única)\n\n`;
 
     if (calculatedValues.selectedList.length > 0) {
       text += `=====================================\n`;
