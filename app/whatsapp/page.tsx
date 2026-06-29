@@ -42,14 +42,7 @@ interface HistoricEntry {
 }
 
 // Initial template
-const INITIAL_TEMPLATE = `Olá, {{nome}}!
-
-Segue em anexo a proposta comercial do sistema PIGMOBI{{empresa_link}}.
-
-Caso tenha qualquer dúvida, estou à disposição!
-
-Obrigado,
-Equipe PIGMOBI`;
+const INITIAL_TEMPLATE = '';
 
 export default function WhatsAppDispatcher() {
   const prefersReducedMotion = useReducedMotion();
@@ -104,11 +97,6 @@ export default function WhatsAppDispatcher() {
       }
     }
 
-    // 3. Template
-    const savedTemplate = localStorage.getItem('pigmobi_whatsapp_template');
-    if (savedTemplate) {
-      setTemplate(savedTemplate);
-    }
 
     // 4. Session import from simulator
     const sessionQuote = sessionStorage.getItem('pigmobi_quote_text');
