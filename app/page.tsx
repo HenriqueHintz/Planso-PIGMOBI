@@ -640,7 +640,7 @@ export default function Page() {
       : `${selectedPlan.accessControl.included} incluso(s) (Total: ${totalAcessos} acesso${totalAcessos > 1 ? 's' : ''})`;
 
     let text = `=====================================\n`;
-    text += `*ORÇAMENTO SISTEMA RESTAURANTE*\n`;
+    text += `*ORÇAMENTO DO SISTEMA*\n`;
     text += `=====================================\n\n`;
     text += `  *Plano Selecionado:* ${selectedPlan.name}\n`;
     text += `  *Acessos no Sistema:* ${acessosTexto}\n`;
@@ -663,12 +663,8 @@ export default function Page() {
       text += `*Adicionais:* Nenhum selecionado.\n`;
     }
 
-    text += `\n=====================================\n`;
-    text += `*CONSOLIDADO FINANCEIRO*\n`;
-    text += `=====================================\n`;
-    text += `  *MENSALIDADE TOTAL:* *${formatCurrency(calculatedValues.totalMonthly)}/mês*\n`;
-    text += `  *IMPLANTAÇÃO:* *${formatCurrency(calculatedValues.setupTotal)}* (Pago uma única vez no onboarding)\n`;
-    text += `=====================================\n\n`;
+    text += `\n  *MENSALIDADE TOTAL:* *${formatCurrency(calculatedValues.totalMonthly)}/mês*\n`;
+    text += `  *IMPLANTAÇÃO:* *${formatCurrency(calculatedValues.setupTotal)}* (Pago uma única vez no onboarding)\n\n`;
     text += `  *Gerado em:* ${dateFormatted}\n`;
     text += `  *Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!*\n`;
 
