@@ -640,16 +640,13 @@ export default function Page() {
       : `${selectedPlan.accessControl.included} incluso(s) (Total: ${totalAcessos} acesso${totalAcessos > 1 ? 's' : ''})`;
 
     let text = `=====================================\n`;
-    text += `*ORÇAMENTO DO SISTEMA*\n`;
+    text += `ORÇAMENTO DO SISTEMA\n`;
     text += `=====================================\n\n`;
-    text += `  *Plano Selecionado:* ${selectedPlan.name}\n`;
-    text += `  *Acessos no Sistema:* ${acessosTexto}\n`;
-    text += `  *Mensalidade Base:* ${formatCurrency(selectedPlan.monthlyPrice)}/mês\n`;
-    text += `  *Taxa de Implantação:* ${formatCurrency(selectedPlan.setupPrice)} (Taxa Única)\n\n`;
+    text += `  Plano Selecionado: ${selectedPlan.name}\n\n`;
 
     if (calculatedValues.selectedList.length > 0) {
-      text += `-------------------------------------\n`;
-      text += `*Adicionais e Acessos Integrados:*\n`;
+      text += `=====================================\n`;
+      text += `Adicionais e Acessos Integrados:\n`;
       calculatedValues.selectedList.forEach(({ item, qty, unitPrice, subtotal }) => {
         if (item.hasQuantity) {
           text += `  • ${item.name} (${qty}x) — ${formatCurrency(unitPrice)}/un [Subtotal: ${formatCurrency(subtotal)}/mês]\n`;
@@ -657,16 +654,15 @@ export default function Page() {
           text += `  • ${item.name} — ${formatCurrency(unitPrice)}/mês \n`;
         }
       });
-      text += `\n  ➔ *Total Adicionais:* ${formatCurrency(calculatedValues.additionalsTotal)}/mês\n`;
-    } else {
-      text += `-------------------------------------\n`;
-      text += `*Adicionais:* Nenhum selecionado.\n`;
+      text += `\n  ➔ Total Adicionais: ${formatCurrency(calculatedValues.additionalsTotal)}/mês\n`;
     }
 
-    text += `\n  *MENSALIDADE TOTAL:* *${formatCurrency(calculatedValues.totalMonthly)}/mês*\n`;
-    text += `  *IMPLANTAÇÃO:* *${formatCurrency(calculatedValues.setupTotal)}* (Pago uma única vez no onboarding)\n\n`;
-    text += `  *Gerado em:* ${dateFormatted}\n`;
-    text += `  *Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!*\n`;
+    text += `=====================================\n`;
+    text += `  MENSALIDADE TOTAL: ${formatCurrency(calculatedValues.totalMonthly)}/mês\n`;
+    text += `  IMPLANTAÇÃO: ${formatCurrency(calculatedValues.setupTotal)} (Pago uma única vez no onboarding)\n`;
+    text += `=====================================\n`;
+    text += `  Gerado em: ${dateFormatted}\n`;
+    text += `  Orçamento válido por 10 dias. Faça seu pedido já para ativação imediata!\n`;
 
     return text;
   };
