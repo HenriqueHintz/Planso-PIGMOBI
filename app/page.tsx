@@ -632,10 +632,16 @@ export default function Page() {
       minute: '2-digit',
     });
 
+    const totalAcessos = selectedPlan.accessControl.included + additionalAcessos;
+    const acessosTexto = additionalAcessos > 0
+      ? `${selectedPlan.accessControl.included} incluso(s) com mais ${additionalAcessos} adicional(is) (Total de ${totalAcessos} acessos)`
+      : `${selectedPlan.accessControl.included} incluso(s) (Total de ${totalAcessos} acesso${totalAcessos > 1 ? 's' : ''})`;
+
     let text = `=====================================\n`;
     text += `📋 ORÇAMENTO SISTEMA RESTAURANTE 🍔🥑\n`;
     text += `=====================================\n\n`;
     text += `⭐ Plano Selecionado: ${selectedPlan.name}\n`;
+    text += `🔑 Acessos no Sistema: ${acessosTexto}\n`;
     text += `💵 Mensalidade Base: ${formatCurrency(selectedPlan.monthlyPrice)}/mês\n`;
     text += `⚙️ Taxa de Implantação: ${formatCurrency(selectedPlan.setupPrice)} (Taxa Única)\n\n`;
 
@@ -998,6 +1004,13 @@ export default function Page() {
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Mensalidade Base ({selectedPlan.name}):</span>
                       <strong className="font-mono text-slate-900 text-sm">{formatCurrency(selectedPlan.monthlyPrice)}/mês</strong>
+                    </div>
+
+                    <div className="flex justify-between items-center text-slate-600">
+                      <span className="font-medium">Acessos no Sistema:</span>
+                      <strong className="text-slate-900 font-bold">
+                        {selectedPlan.accessControl.included} {additionalAcessos > 0 ? `+ ${additionalAcessos} adicional(is)` : ''} (Total: {selectedPlan.accessControl.included + additionalAcessos})
+                      </strong>
                     </div>
 
                     {additionalAcessos > 0 && (
@@ -1397,6 +1410,14 @@ export default function Page() {
                   <td className="p-3 text-center font-mono font-bold">{formatCurrency(selectedPlan.setupPrice)}</td>
                   <td className="p-3 text-right font-mono font-bold text-emerald-800">{formatCurrency(selectedPlan.monthlyPrice)}/mês</td>
                 </tr>
+                <tr className="bg-slate-50/50">
+                  <td className="p-3 text-xs text-slate-700" colSpan={3}>
+                    <div className="flex justify-between items-center">
+                      <span><strong>Acessos Liberados no Sistema:</strong> {selectedPlan.accessControl.included} incluso(s) {additionalAcessos > 0 ? `com mais ${additionalAcessos} adicional(is)` : ''}</span>
+                      <strong className="font-mono text-slate-900">Total: {selectedPlan.accessControl.included + additionalAcessos} acesso(s)</strong>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -1513,7 +1534,7 @@ export default function Page() {
                 <span className="text-lg font-black font-mono text-emerald-700 leading-none">{formatCurrency(calculatedValues.totalMonthly)}</span>
                 <span className="text-[9px] text-slate-400">/mês</span>
               </div>
-              <span className="text-[9px] text-slate-500">Setup: {formatCurrency(calculatedValues.setupTotal)}</span>
+              <span className="text-[9px] text-slate-500">Setup: {formatCurrency(calculatedValues.setupTotal)} | {selectedPlan.accessControl.included + additionalAcessos} acesso(s)</span>
             </div>
 
             {/* Right: action buttons */}
