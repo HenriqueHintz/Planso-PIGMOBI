@@ -11,7 +11,6 @@ import {
   HelpCircle,
   TrendingUp,
   Info,
-  PiggyBank,
   FileText,
   Tv,
   ShoppingBag,
@@ -30,10 +29,10 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
-  Printer,
   Share2
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { PLANOS_JSON, PLANS, ALL_ADDITIONAL_ITEMS, formatCurrency, PlanDefinition, AdditionalItemDefinition } from '../lib/data';
 
 // Component to dynamically render Lucide Icons by name
@@ -728,10 +727,7 @@ export default function Page() {
           className="flex items-center gap-2"
           id="brand-header-icon"
         >
-          <div className="p-1.5 bg-emerald-600 text-white rounded-lg shadow-xs shrink-0">
-            <PiggyBank className="w-4 h-4 stroke-[1.5]" />
-          </div>
-          <span className="text-sm font-black text-slate-900 tracking-tight hidden sm:block">PIGMOBI</span>
+          <Image src="/logo-pigmobi.webp" alt="PIGMOBI" width={120} height={36} className="h-7 w-auto object-contain shrink-0" priority />
         </motion.div>
 
         <div className="flex items-center gap-2">
@@ -745,7 +741,7 @@ export default function Page() {
                   : 'text-slate-600 hover:text-slate-950'
               }`}
             >
-              <PiggyBank className="w-3 h-3" />
+              <DollarSign className="w-3 h-3" />
               <span>Simulador</span>
             </button>
             <button
@@ -1008,7 +1004,7 @@ export default function Page() {
                 {/* Header widget */}
                 <div className="bg-slate-900 p-4 text-white text-left relative">
                   <div className="absolute top-0 right-0 p-3 opacity-5 pointer-events-none">
-                    <PiggyBank className="w-16 h-16 text-white" />
+                    <DollarSign className="w-16 h-16 text-white" />
                   </div>
                   <span className="text-[9px] bg-emerald-600 text-white font-mono font-bold tracking-widest uppercase px-2 py-0.5 rounded-full block w-fit mb-2">
                     SIMULADOR DE CONTRATO
@@ -1118,21 +1114,10 @@ export default function Page() {
                     <button
                       type="button"
                       onClick={copyToClipboard}
-                      className="w-full py-3.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 border border-slate-200 font-sans"
+                      className="col-span-2 w-full py-3.5 px-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg font-sans cursor-pointer"
                     >
-                      <Copy className="w-3.5 h-3.5 text-slate-500" />
+                      <Copy className="w-4 h-4 text-emerald-400 stroke-[2.5]" />
                       <span>Copiar Proposta</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={sendToWhatsApp}
-                      className="w-full py-3.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 border border-slate-200 font-sans"
-                    >
-                      <svg className="w-3.5 h-3.5 fill-current text-slate-500 shrink-0" viewBox="0 0 24 24">
-                        <path d="M12.011 20c-3.123 0-5.877-1.464-7.669-3.754l-.454-.576-2.505.654.67-2.454-.424-.555C1.199 12.695.836 11.233.836 9.75c0-4.839 3.931-8.771 8.771-8.771 4.84 0 8.773 3.932 8.773 8.771 0 4.839-3.933 8.771-8.772 8.771zM19.61 9.75c0-5.938-4.821-10.75-10.75-10.75C2.923-1 1.9 4.812 1.9 10.75c0 1.83.47 3.55 1.3 5.06l-.92 3.39 3.49-.91c1.44.8 3.08 1.21 4.79 1.21 5.92-.01 10.75-4.81 10.75-10.75z" />
-                      </svg>
-                      <span>Link Rápido WA</span>
                     </button>
 
                     <button
@@ -1142,15 +1127,6 @@ export default function Page() {
                     >
                       <Share2 className="w-4 h-4 stroke-[2.5]" />
                       <span>Enviar no WhatsApp (Disparador)</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => window.print()}
-                      className="col-span-2 w-full py-4 px-4 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl text-xs transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
-                    >
-                      <Printer className="w-4 h-4 text-emerald-400 stroke-[2.5]" />
-                      <span>Gerar Proposta Comercial (PDF / Impressão)</span>
                     </button>
                   </div>
                 </div>
@@ -1388,8 +1364,8 @@ export default function Page() {
         {/* Document Header */}
         <div className="border-b-4 border-slate-900 pb-5 mb-6 flex justify-between items-start">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-emerald-700">
-              <PiggyBank className="w-8 h-8 stroke-[2.5]" />
+            <div className="flex items-center gap-3">
+              <Image src="/logo-pigmobi.webp" alt="PIGMOBI" width={160} height={48} className="h-10 w-auto object-contain" />
               <span className="font-mono font-black text-xs uppercase tracking-widest bg-emerald-50 px-2 py-1 rounded text-emerald-800 border border-emerald-100">SIMULADOR DE INVESTIMENTO</span>
             </div>
             <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">PROPOSTA COMERCIAL</h1>
@@ -1573,9 +1549,9 @@ export default function Page() {
               <button
                 type="button"
                 onClick={copyToClipboard}
-                className="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 border border-slate-200"
+                className="py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md"
               >
-                <Copy className="w-3 h-3 text-slate-500" />
+                <Copy className="w-3 h-3 text-emerald-400" />
                 <span>Copiar</span>
               </button>
               <button
@@ -1585,14 +1561,6 @@ export default function Page() {
               >
                 <Share2 className="w-3 h-3 text-white" />
                 <span>WhatsApp</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-[10px] transition-all flex items-center gap-1 shadow-md"
-              >
-                <Printer className="w-3 h-3 text-emerald-400" />
-                <span>PDF</span>
               </button>
             </div>
           </div>
